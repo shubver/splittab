@@ -46,7 +46,10 @@ Full log and reasoning: [05-decisions-and-stack.md](05-decisions-and-stack.md).
 |---|---|---|
 | Region focus | **Global** | Decided |
 | Mobile framework | **Flutter** | Decided |
-| Backend | **Python (FastAPI)** | Decided |
+| Balance maths | **Dart package on the device** (one implementation) | Decided |
+| Data + sync | **Supabase + PowerSync** | Decided |
+| AI service | **Python (FastAPI)** | Decided |
+| Infrastructure | **Managed first; Kubernetes/Helm + Ray Serve for AI later** | Decided |
 | Voice | **Server-side first**, on-device later | Decided |
 | Alcohol | Own category vs tag under Food & Drinks | Open (leaning tag) |
 | Custom categories | Per trip vs per account | Open |

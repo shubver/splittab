@@ -1,91 +1,107 @@
 # Decisions and tech stack
 
-_Date: 2026-11-24._
+_Date: 2026-11-24 (revised the same day: balance maths moved to Dart, Supabase + PowerSync for sync, infra stance added)._
 
 ## Decisions log
 | # | Decision | Choice | Notes |
 |---|---|---|---|
 | D1 | Target user | **Travel groups** | See doc 03 |
 | D2 | Region | **Global from day one** | See "What global means" below |
-| D3 | Voice processing | **Server-side first**, on-device later as an optimization | Faster to build, better accuracy across languages. Move to on-device once usage and costs are known. |
-| D4 | Mobile framework | **Flutter** | Reasoning below |
-| D5 | Backend | **Python (FastAPI)** | Plays to the team's strengths |
-| D6 | Settling | **After "End trip"** | See doc 03, Feature 4 |
+| D3 | Voice processing | **Server-side first**, on-device later as an optimization | Faster to build, better accuracy across languages |
+| D4 | Mobile framework | **Flutter** | Developer has a Mac, so local iOS builds work |
+| D5 | Balance & settle-up maths | **One Dart package, running on the device** | Works offline; one implementation means numbers never disagree |
+| D6 | Data + sync | **Supabase (Postgres, auth, row-level security) + PowerSync (offline SQLite sync)** | No custom sync server to build; both can be self-hosted later |
+| D7 | AI service | **Python (FastAPI)** | Voice parsing, notification parsing, categorization, exchange rates |
+| D8 | Infrastructure | **Managed services first; Kubernetes/Helm later, when cost or scale justifies it** | See "Infrastructure and scaling" |
+| D9 | Settling | **After "End trip"** | See doc 03, Feature 4 |
 
 ---
 
 ## What "global" means for v1
-- **Multi-currency is core, not an add-on.** Every expense has its own currency, and every trip has one home currency for totals and settle-up. Daily exchange rates from a rates API, plus "rate you actually paid" (see ideas backlog).
-- **Number, date and currency formats** follow the phone's locale (₹1,00,000 vs $100,000 vs 100.000 €).
-- **Translations:** English at launch, with every string kept translatable from day one. Strong next languages for travel groups: Spanish, Portuguese, German, French, Hindi.
-- **Voice in many languages and mixed languages:** a server-side speech model handles this better than on-device recognizers, which is one more reason for D3.
-- **Payment links by region:** UPI (India), PayPal, Revolut, Wise, Venmo/Cash App (US), PIX (Brazil), bank-transfer details as a fallback. Shown based on members' regions.
-- **Merchant keyword lists by region** for auto-categorization (doc 04). Start with India, US and Europe, and let corrections improve them.
-- **Tolls** stay a sub-tag under Local transport (doc 04, question 1 resolved).
+- **Multi-currency is core.** Each expense has its own currency; each trip has one home currency for totals and settle-up. Daily exchange rates, plus "rate you actually paid".
+- **Formats follow the phone's locale** (₹1,00,000 vs $100,000 vs 100.000 €).
+- **Translations:** English at launch, every string translatable from day one.
+- **Voice in many and mixed languages:** a server-side speech model handles this better than on-device recognizers (D3).
+- **Payment links by region:** UPI, PayPal, Revolut, Wise, Venmo/Cash App, PIX, plus bank details as a fallback.
+- **Merchant keyword lists by region** for auto-categorization (doc 04). **Tolls** stay a sub-tag under Local transport.
 
 ---
 
-## Why Flutter (for a Python data scientist)
-Neither option is Python, so the real question is which is **easier to learn and less fragile** for someone who isn't a mobile developer.
+## Why the money maths lives in Dart, on the phone
+The app must work offline on a trip, so **balances must be computed on the device.** If the same maths also existed in Python on a server, two implementations could drift apart (rounding, edge cases) and show different numbers, which is the "my balances are wrong" complaint that hurts every competitor (doc 02).
 
-| | **Flutter (Dart)** | Expo (React Native, TypeScript) |
-|---|---|---|
-| Language for a Python developer | Dart is clean, typed and class-based, a short step from typed Python | TypeScript plus the React model plus the JS ecosystem: more concepts at once |
-| Number of moving parts | **One toolkit**: UI, navigation and state all from one framework with excellent docs | Many libraries to choose and keep compatible |
-| Clean, custom UI | **Draws every pixel itself**, so the design looks the same on iOS and Android | Uses native components; small differences per platform |
-| Packages we need | Notifications, location, speech, home widgets, SQLite and Android notification listener all have mature packages | Also covered; some need custom native modules |
-| iOS builds without a Mac | Needs a Mac **or** a cloud build service (Codemagic, GitHub Actions macOS) | Expo's cloud build (EAS) does it out of the box |
-| Web version | Flutter web is heavy for a small link page | Can share code with the web |
-
-**Verdict: your instinct is right, Flutter is the better fit.** Its two weak spots are easy to work around:
-- **iOS builds:** use Codemagic (it has a free tier) or a GitHub Actions macOS runner. You don't need to own a Mac to start; develop and test on Android first.
-- **Guest web page** (friends without the app open the invite link): build it as a **small server-rendered page from the Python backend** (FastAPI + simple HTML). It only needs to show the trip and offer a quick "add expense" form, so it doesn't need Flutter.
+So:
+- `splittab_core`: a **pure Dart package** (no UI, no I/O) with money arithmetic in integer minor units, splits (equal, exact, %, shares, by nights, subgroups, per person), balances, and settle-up (fewest payments + direct view).
+- **Language-neutral test fixtures** (`fixtures/*.json`: input trip → expected balances and settle-up) are the reference answers. They can be written or checked in Python notebooks; the Dart package must pass all of them.
+- The server never recomputes balances; it only stores and syncs expenses.
 
 ---
 
-## Architecture overview
+## Architecture
 ```
-┌───────────────────────────────┐        ┌──────────────────────────────────────┐
-│  Flutter app (iOS + Android)  │        │  Python backend (FastAPI)            │
-│  - UI, offline SQLite (drift) │◄──────►│  - REST/JSON API + sync              │
-│  - local notifications        │  HTTPS │  - balances & settle-up engine       │
-│  - location visits (on-device)│        │  - voice: speech-to-text → LLM parse │
-│  - Android notif. listener    │        │  - categorization (keywords + model) │
-│  - mic recording              │        │  - exchange rates (daily job)        │
-└───────────────────────────────┘        │  - guest web page for invite links   │
-                                         └───────────────┬──────────────────────┘
-                                                         │
-                                                 ┌───────▼────────┐
-                                                 │  PostgreSQL     │
-                                                 └────────────────┘
+┌──────────────────────────────────────┐
+│ Flutter app (iOS + Android)          │
+│  - UI                                │
+│  - splittab_core (balances, settle)  │
+│  - local SQLite via PowerSync SDK    │──── sync ────┐
+│  - notifications, location visits,   │              │
+│    Android notification listener     │              ▼
+└───────────────┬──────────────────────┘    ┌──────────────────┐     ┌──────────────┐
+                │                           │ PowerSync service│◄───►│ Supabase     │
+                │ HTTPS (voice, parse)      └──────────────────┘     │ Postgres     │
+                ▼                                                    │ Auth, RLS    │
+┌──────────────────────────────────────┐                             │ Storage      │
+│ Python AI service (FastAPI)          │◄────────────────────────────┤ (receipts,   │
+│  - speech-to-text → LLM → drafts     │   reads members/categories  │  audio)      │
+│  - payment-notification parsing      │                             └──────────────┘
+│  - categorization (rules → model)    │
+│  - exchange-rates daily job          │
+└──────────────────────────────────────┘
+
+Guest web page (invite link): a small Flutter web build that reuses splittab_core,
+so guests see exactly the same numbers as the app.
 ```
-
-**Where your Python expertise matters most** (it's the heart of the product):
-- **Balance and settle-up engine**: exact decimal maths, split by nights, vehicle subgroups, minimizing the number of payments. Pure Python with heavy unit tests.
-- **Voice pipeline**: audio → transcript → structured expenses with an LLM, matched against members and categories, plus evaluation sets to measure accuracy. This is data science work.
-- **Categorization**: start with keyword rules, then learn from user corrections.
-- **Payment-notification parsing**: amount, currency and merchant from bank notification text in many formats and languages. Can start on the server for fast iteration, then move parsing onto the device for privacy.
-
-**Suggested components**
-| Layer | Choice |
-|---|---|
-| Mobile | Flutter, Riverpod (state), drift (offline SQLite), go_router |
-| Backend | FastAPI, SQLAlchemy + Alembic, Pydantic, pytest |
-| Database | PostgreSQL |
-| Voice | A hosted speech-to-text API + a small, fast LLM for parsing (provider to be chosen) |
-| Hosting | One small container host (e.g. Fly.io, Render or Railway) + managed Postgres |
-| Builds | Codemagic or GitHub Actions for iOS/Android |
 
 ---
 
-## Suggested build order
-1. **Backend core (Python, start here):** data model (trips, members, expenses, splits, payments) + balance/settle-up engine with tests. No app needed yet; your strongest area first.
-2. **API + guest web page:** create a trip, add expenses, see balances in a browser. This already makes a usable product to test with friends.
-3. **Flutter app v1:** trip home, quick add, bulk add, balances, end trip, offline.
-4. **Voice to split:** server pipeline + mic button.
-5. **Smart capture:** day-end reminders, Android payment prompts, location timeline.
+## Infrastructure and scaling
+**A realistic sense of load:** an expense-splitting app has tiny data and low traffic per user. Even **1 million users** adding ~5 expenses a day is around **60 writes/second on average**, which a single managed Postgres handles easily. **The database and sync won't be the scaling problem.**
+
+**The one heavy workload is the AI service:** speech-to-text and LLM calls, which are bursty (evenings on trips) and cost real money per request. That's where your Ray and Kubernetes experience pays off.
+
+### Phase 1: launch (managed, near-zero ops)
+- Supabase cloud (Postgres, Auth, Storage) and PowerSync cloud.
+- Python AI service as **one container** on a simple host (Fly.io, Render, Cloud Run), calling **hosted** speech and LLM APIs.
+- Cost: free tiers to tens of dollars a month. Time goes into the product, not the cluster.
+
+### Phase 2: growth (when AI API costs or latency hurt)
+- Move the AI service to **Kubernetes, deployed with Helm**.
+- **Self-host the speech model** (Whisper-class) on GPUs with **Ray Serve**: autoscaling replicas, batching requests, scaling to zero off-peak.
+- Optionally a small open-weight LLM for parsing, falling back to a hosted LLM for hard cases.
+- Batch jobs (retraining the categorizer on user corrections, evaluation runs) on Ray.
+
+### Phase 3: full ownership (only if needed: cost, data residency, compliance)
+- **Self-host Supabase and PowerSync** on the same cluster with Helm (both have self-hostable versions), with managed Postgres or a Postgres operator.
+
+**Exit path built in:** every component is open source or self-hostable (Postgres, Supabase, PowerSync open edition, FastAPI, Ray), so moving from managed to self-hosted is a migration, not a rewrite.
+
+### Ground rules from day one (cheap now, saves pain later)
+- Everything ships as a container. A Dockerfile per service from the first commit.
+- Configuration through environment variables; no hard-coded hosts.
+- The AI service is **stateless**: drafts go back to the app, and only confirmed expenses are written to the database.
+- Structured logs and basic metrics (latency, cost per voice request, parse accuracy).
+
+---
+
+## Build order
+1. **Balance fixtures:** about 30 JSON test cases covering equal and uneven splits, by nights, subgroups, multiple currencies, rounding, settle-up. Drafted and checked in Python.
+2. **`splittab_core` in Dart:** passes every fixture. A small, self-contained first Dart project.
+3. **Supabase schema + PowerSync sync rules:** trips, members, expenses, splits, payments, with row-level security.
+4. **Flutter app v1:** trip home, quick add, bulk add, balances, End trip, offline.
+5. **Python AI service:** voice to split, then payment-notification parsing and categorization.
+6. **Smart capture:** day-end reminders, Android payment prompts, location timeline.
 
 ## Still open
-- Voice speech-to-text and LLM provider choice and budget
+- Speech-to-text and LLM provider choice and budget
 - Custom categories per trip vs per account (doc 04, question 3)
 - Alcohol as its own category or a tag (leaning tag)
