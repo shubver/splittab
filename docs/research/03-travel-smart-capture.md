@@ -94,6 +94,32 @@ What's possible differs a lot by platform:
 
 ---
 
+## Feature 4: "End trip" button → settle up
+_Suggested 2026-11-24._
+
+The trip has a clear **End trip** button. Settling happens **after** the trip is ended, not during it, so nobody pays early and then has to pay again when late expenses arrive (a Splitwise pain point in doc 02).
+
+**Flow**
+1. **Tap "End trip"** (on the trip home; also suggested by a notification on the trip's end date, but **never automatic**).
+2. **Pre-close checklist**: SplitTab shows what's still open before closing:
+   - Unconfirmed drafts (voice, payment prompts) waiting for review
+   - Offline entries from members' phones that haven't synced yet ("Priya has 2 unsynced expenses")
+   - Refundable deposits still pending (bike or hotel deposit)
+   - Leftover kitty cash, to be returned to contributors
+   - Gap warnings ("No Stay logged for night 3")
+3. **Grace period**: members get a notification, "Trip ending: add anything you missed in the next 24 h". The period length is configurable and can be skipped if everyone confirms.
+4. **Trip closes**: new expenses are locked and balances freeze. The summary card shows totals, category breakdown and each person's share.
+5. **Settle-up plan**: the fewest payments needed, with the direct "who owes whom" view alongside (explainable, per doc 02). Each payment has a **pay link** (UPI, PayPal, Revolut and others by region) and a **"Mark as paid"** button. The receiver confirms they got the money.
+6. **Settled**: when every payment is confirmed, the trip moves to **Archived**, read-only and searchable, with a CSV export.
+
+**Rules**
+- **Who can end:** any member can start it. Everyone gets notified and can say "wait, I still have expenses" during the grace period.
+- **Reopen:** a closed trip can be reopened (for a forgotten expense or a late refund). The settle-up plan is then recalculated, and payments already made count as credit.
+- **Reminders:** after closing, at most one gentle reminder every few days for people with unpaid balances, and they stop once settled.
+- **Optional mid-trip settling** stays possible for long trips, but it's not the default.
+
+---
+
 ## Platform decision: this requires a native app
 Background location, scheduled local notifications, notification listening, Wallet App Intents and home-screen widgets **are not available to a PWA**, especially on iOS, where PWAs get no background location or background sync.[^pwa] That overturns the earlier lean toward a PWA.
 

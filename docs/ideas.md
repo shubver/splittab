@@ -28,6 +28,7 @@ A running list of ideas for SplitTab. Add new ideas at the top of **Inbox** with
 | Payment-triggered "split this?" prompt | [03](research/03-travel-smart-capture.md) |
 | Voice to split (several expenses per sentence) | [03](research/03-travel-smart-capture.md) |
 | Cash kitty, gap detection, daily pulse, widgets, end-of-trip wrap-up | [03](research/03-travel-smart-capture.md) |
+| "End trip" button: checklist → grace period → freeze → settle-up plan → archive _(suggested 2026-11-24)_ | [03](research/03-travel-smart-capture.md#feature-4-end-trip-button--settle-up) |
 | Travel categories with smart default splits (by nights, vehicle subgroups, deposits, per person) | [04](research/04-travel-categories.md) |
 
 ## Parked
