@@ -97,9 +97,15 @@ so guests see exactly the same numbers as the app.
 1. ✅ **Balance fixtures (done):** 47 JSON test cases plus a Python reference implementation and tests. See [`fixtures/README.md`](../fixtures/README.md).
 2. ✅ **`splittab_core` in Dart (done):** passes every fixture on the VM and compiled to JavaScript. See [`packages/splittab_core`](../packages/splittab_core/README.md).
 3. **Supabase schema + PowerSync sync rules:** trips, members, expenses, splits, payments, with row-level security.
-4. **Flutter app v1:** trip home, quick add, bulk add, balances, End trip, offline.
+4. ✅ **Flutter app v1 (first slice done):** trips, quick add, bulk add, explainable balances, End trip and settle, local storage. See [`apps/splittab`](../apps/splittab/README.md). Still to do: sync between phones, editing an expense, multiple payers in the UI.
 5. **Python AI service:** voice to split, then payment-notification parsing and categorization.
 6. **Smart capture:** day-end reminders, Android payment prompts, location timeline.
+
+## Build notes (from building the app)
+- **State and storage:** kept deliberately simple for now (`ChangeNotifier` plus a JSON list in local storage), not Riverpod and SQLite yet. Only `data/store.dart` changes when PowerSync arrives.
+- **Icons:** Flutter 3.50 made `IconData` final, so the `phosphor_flutter` package no longer compiles. The app bundles the Phosphor icon font and a generated list of the icons it uses.
+- **Web engine:** `flutter build web --no-web-resources-cdn` so the app and the guest page do not depend on Google's CDN (offline first).
+- **Design system:** tokens from the landing page design skill applied to the app (Geist, named text styles, spacing and radius scales, flat palette, motion curve, full state set).
 
 ## Still open
 - Speech-to-text and LLM provider choice and budget

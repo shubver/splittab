@@ -1,0 +1,25 @@
+name: app
+
+on:
+  push:
+    paths: ['apps/**', 'packages/splittab_core/**', 'fixtures/**', '.github/workflows/app.yml']
+  pull_request:
+    paths: ['apps/**', 'packages/splittab_core/**', 'fixtures/**', '.github/workflows/app.yml']
+
+jobs:
+  flutter:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/splittab
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.50.1'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build web --release --no-web-resources-cdn

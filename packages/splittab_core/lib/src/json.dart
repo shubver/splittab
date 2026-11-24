@@ -83,6 +83,51 @@ TripInput tripInputFromJson(Map<String, Object?> json) {
   );
 }
 
+Map<String, Object?> splitToJson(Split split) => switch (split) {
+      EqualSplit(:final among) => {'type': 'equal', 'among': among},
+      ExactSplit(:final amounts) => {'type': 'exact', 'amounts': amounts},
+      PercentSplit(:final percents) => {
+          'type': 'percent',
+          'percents': {
+            for (final e in percents.entries) e.key: e.value.toDecimalString()
+          },
+        },
+      SharesSplit(:final shares) => {
+          'type': 'shares',
+          'shares': {
+            for (final e in shares.entries) e.key: e.value.toDecimalString()
+          },
+        },
+      NightsSplit(:final totalNights, :final nights) => {
+          'type': 'nights',
+          'total_nights': totalNights,
+          'nights': nights,
+        },
+    };
+
+Map<String, Object?> expenseToJson(Expense e) => {
+      'id': e.id,
+      'amount': e.amount,
+      if (e.currency != null) 'currency': e.currency,
+      if (e.rate != null) 'rate': e.rate!.toDecimalString(),
+      'paid_by': e.paidBy,
+      'split': splitToJson(e.split),
+    };
+
+Map<String, Object?> paymentToJson(Payment p) =>
+    {'from': p.from, 'to': p.to, 'amount': p.amount};
+
+/// Inverse of [tripInputFromJson]: writes the same format the fixtures use.
+Map<String, Object?> tripInputToJson(TripInput input) => {
+      'trip': {
+        'home_currency': input.trip.homeCurrency,
+        'members': input.trip.members
+      },
+      'currency_exponents': input.trip.currencyExponents,
+      'expenses': [for (final e in input.expenses) expenseToJson(e)],
+      'payments': [for (final p in input.payments) paymentToJson(p)],
+    };
+
 Map<String, Object?> _transferJson(Transfer t) =>
     {'from': t.from, 'to': t.to, 'amount': t.amount};
 

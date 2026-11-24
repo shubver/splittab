@@ -69,6 +69,34 @@ class Rational implements Comparable<Rational> {
   /// Largest integer <= this (rounds toward negative infinity).
   BigInt floor() => (numerator - (numerator % denominator)) ~/ denominator;
 
+  /// Exact decimal text such as `1.1` or `0.00003987` (inverse of [Rational.parse]).
+  /// Only values with a terminating decimal expansion are supported; anything else throws.
+  String toDecimalString() {
+    var rest = denominator;
+    var twos = 0, fives = 0;
+    final two = BigInt.two, five = BigInt.from(5);
+    while (rest % two == BigInt.zero) {
+      rest ~/= two;
+      twos++;
+    }
+    while (rest % five == BigInt.zero) {
+      rest ~/= five;
+      fives++;
+    }
+    if (rest != BigInt.one) {
+      throw StateError('Not a terminating decimal: $this');
+    }
+    final scale = twos > fives ? twos : fives;
+    final scaled = numerator.abs() * BigInt.from(10).pow(scale) ~/ denominator;
+    final digits = scaled.toString().padLeft(scale + 1, '0');
+    final whole = digits.substring(0, digits.length - scale);
+    final fraction = digits
+        .substring(digits.length - scale)
+        .replaceFirst(RegExp(r'0+$'), '');
+    final sign = isNegative ? '-' : '';
+    return fraction.isEmpty ? '$sign$whole' : '$sign$whole.$fraction';
+  }
+
   @override
   int compareTo(Rational other) =>
       (numerator * other.denominator).compareTo(other.numerator * denominator);

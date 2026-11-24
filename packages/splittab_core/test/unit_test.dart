@@ -16,6 +16,25 @@ void main() {
         expect(() => Rational.parse(bad), throwsFormatException, reason: bad);
       }
     });
+    test('toDecimalString is the exact inverse of parse', () {
+      for (final text in [
+        '1.1',
+        '83',
+        '0.00003987',
+        '-2.5',
+        '0',
+        '100',
+        '33.333333',
+        '0.5',
+        '150.25'
+      ]) {
+        expect(Rational.parse(text).toDecimalString(), text);
+      }
+      expect(Rational.parse('1.10').toDecimalString(), '1.1');
+      expect(Rational.parse('007.500').toDecimalString(), '7.5');
+      expect(() => Rational(BigInt.one, BigInt.from(3)).toDecimalString(),
+          throwsStateError);
+    });
     test('floor rounds toward negative infinity', () {
       expect(Rational.parse('2.5').floor(), BigInt.two);
       expect(Rational.parse('-2.5').floor(), BigInt.from(-3));
