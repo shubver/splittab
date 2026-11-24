@@ -1,0 +1,34 @@
+{
+  "id": "49-error-amount-too-large",
+  "description": "Amounts above 9,000,000,000,000 minor units are rejected, which keeps plain-integer sums exact on Flutter web.",
+  "tags": [
+    "error",
+    "web-int-safety"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 9000000000001,
+      "paid_by": {
+        "alice": 9000000000001
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "error": "amount_too_large"
+  }
+}

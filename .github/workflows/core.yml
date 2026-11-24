@@ -1,0 +1,37 @@
+name: core
+
+on:
+  push:
+    paths: ['fixtures/**', 'packages/splittab_core/**', '.github/workflows/core.yml']
+  pull_request:
+    paths: ['fixtures/**', 'packages/splittab_core/**', '.github/workflows/core.yml']
+
+jobs:
+  python-reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install pytest
+      - run: python3 -m pytest fixtures/reference -q
+
+  dart-core:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/splittab_core
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with: { sdk: stable }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: dart pub get
+      - run: dart analyze --fatal-infos
+      - run: dart test
+      - name: Same cases under JavaScript numbers (Flutter web)
+        run: |
+          mkdir -p build
+          dart compile js -O1 -o build/core.js tool/web_entry.dart
+          node tool/web_check.js

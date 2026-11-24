@@ -1,0 +1,48 @@
+{
+  "id": "48-refund-zero-share-no-negative-zero",
+  "description": "A refund where one member's share is zero must report 0, never -0 (JavaScript/Flutter web would print -0).",
+  "tags": [
+    "refund",
+    "edge",
+    "web-int-safety"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": -100,
+      "paid_by": {
+        "alice": -100
+      },
+      "split": {
+        "type": "exact",
+        "amounts": {
+          "alice": -100,
+          "bob": 0
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 0,
+      "bob": 0
+    },
+    "settle": {
+      "min_payments": 0,
+      "plan": []
+    },
+    "expense_owed": {
+      "e1": {
+        "alice": -100,
+        "bob": 0
+      }
+    }
+  }
+}

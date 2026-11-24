@@ -17,6 +17,15 @@ from typing import Any
 MAX_EXACT_SETTLE_MEMBERS = 20
 
 
+# Largest absolute amount accepted (minor units). Keeps plain-int sums exact on Flutter web.
+MAX_AMOUNT = 9_000_000_000_000
+
+
+def check_amount(value: int) -> None:
+    if abs(value) > MAX_AMOUNT:
+        raise SplitError("amount_too_large", str(value))
+
+
 class SplitError(Exception):
     """Invalid input. `code` is one of the error codes listed in fixtures/README.md."""
 
@@ -30,6 +39,7 @@ class SplitError(Exception):
 def round_half_away(x: Fraction) -> int:
     """Round to the nearest integer; exact ties go away from zero."""
     n = floor(abs(x) + Fraction(1, 2))
+    check_amount(n)
     return -n if x < 0 else n
 
 
@@ -46,6 +56,8 @@ def to_home_minor(amount: int, currency: str, rate: str | None, home: str,
     r = Fraction(rate)
     if r <= 0:
         raise SplitError("invalid_rate", rate)
+    if currency not in exponents or home not in exponents:
+        raise SplitError("unknown_currency", currency)
     factor = Fraction(10) ** (exponents[home] - exponents[currency])
     return round_half_away(Fraction(amount) * r * factor)
 
@@ -86,7 +98,7 @@ def _split_weights(split: dict[str, Any], amount: int, members: set[str]) -> dic
         if sum(amounts.values()) != amount:
             raise SplitError("split_sum_mismatch")
         for m, a in amounts.items():
-            w[m] = Fraction(a, amount)
+            w[m] = Fraction(a, amount) if amount != 0 else Fraction(0)
     elif kind == "percent":
         pcts = {m: Fraction(p) for m, p in split["percents"].items()}
         _known(pcts, members)
@@ -135,10 +147,11 @@ def process_expense(case: dict[str, Any], e: dict[str, Any]) -> dict[str, Any]:
 
     amount = e["amount"]
     currency = e.get("currency", home)
-    if currency != home and (currency not in exps or home not in exps):
-        raise SplitError("unknown_currency", currency)
 
     paid_by = e["paid_by"]
+    check_amount(amount)
+    for v in paid_by.values():
+        check_amount(v)
     _known(paid_by, members)
     if sum(paid_by.values()) != amount:
         raise SplitError("payer_sum_mismatch")
@@ -174,6 +187,7 @@ def compute_balances(case: dict[str, Any]) -> tuple[dict[str, int], dict[str, di
             balances[m] += r["net"][m]
     for p in case.get("payments", []):
         _known([p["from"], p["to"]], set(order))
+        check_amount(p["amount"])
         balances[p["from"]] += p["amount"]
         balances[p["to"]] -= p["amount"]
     return balances, per_expense
