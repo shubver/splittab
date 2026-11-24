@@ -1,0 +1,41 @@
+{
+  "id": "45-error-night-uncovered",
+  "description": "Night 3 has nobody staying, so its cost has no one to be split among.",
+  "tags": [
+    "error",
+    "nights"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 9000,
+      "paid_by": {
+        "alice": 9000
+      },
+      "split": {
+        "type": "nights",
+        "total_nights": 3,
+        "nights": {
+          "alice": [
+            1,
+            2
+          ],
+          "bob": [
+            2
+          ]
+        }
+      }
+    }
+  ],
+  "expected": {
+    "error": "night_uncovered"
+  }
+}

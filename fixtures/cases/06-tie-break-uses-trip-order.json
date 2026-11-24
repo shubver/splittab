@@ -1,0 +1,61 @@
+{
+  "id": "06-tie-break-uses-trip-order",
+  "description": "Extra unit goes by position in trip.members (zed first), NOT by the order of the 'among' list.",
+  "tags": [
+    "equal",
+    "rounding"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "zed",
+      "amy",
+      "bob"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 101,
+      "paid_by": {
+        "amy": 101
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "bob",
+          "zed"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "zed": -51,
+      "amy": 101,
+      "bob": -50
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "zed",
+          "to": "amy",
+          "amount": 51
+        },
+        {
+          "from": "bob",
+          "to": "amy",
+          "amount": 50
+        }
+      ]
+    },
+    "expense_owed": {
+      "e1": {
+        "zed": 51,
+        "amy": 0,
+        "bob": 50
+      }
+    }
+  }
+}

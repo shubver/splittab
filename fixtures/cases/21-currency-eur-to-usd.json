@@ -1,0 +1,55 @@
+{
+  "id": "21-currency-eur-to-usd",
+  "description": "EUR expense in a USD trip: 100.00 EUR x 1.10 = 110.00 USD.",
+  "tags": [
+    "currency"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob"
+    ]
+  },
+  "currency_exponents": {
+    "USD": 2,
+    "EUR": 2
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 10000,
+      "paid_by": {
+        "alice": 10000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      },
+      "currency": "EUR",
+      "rate": "1.10"
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 5500,
+      "bob": -5500
+    },
+    "settle": {
+      "min_payments": 1,
+      "plan": [
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 5500
+        }
+      ]
+    },
+    "expense_home_totals": {
+      "e1": 11000
+    }
+  }
+}

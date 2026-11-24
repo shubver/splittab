@@ -1,0 +1,39 @@
+{
+  "id": "46-error-missing-rate",
+  "description": "A EUR expense in a USD trip has no exchange rate.",
+  "tags": [
+    "error",
+    "currency"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob"
+    ]
+  },
+  "currency_exponents": {
+    "USD": 2,
+    "EUR": 2
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 5000,
+      "paid_by": {
+        "alice": 5000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      },
+      "currency": "EUR"
+    }
+  ],
+  "expected": {
+    "error": "missing_rate"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "id": "32-settle-chain-simplifies",
+  "description": "Alice owes Bob, Bob owes Carol. Direct view shows both debts; the minimal plan is one payment Alice -> Carol.",
+  "tags": [
+    "settle",
+    "direct"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 10000,
+      "paid_by": {
+        "bob": 10000
+      },
+      "split": {
+        "type": "exact",
+        "amounts": {
+          "alice": 10000
+        }
+      }
+    },
+    {
+      "id": "e2",
+      "amount": 10000,
+      "paid_by": {
+        "carol": 10000
+      },
+      "split": {
+        "type": "exact",
+        "amounts": {
+          "bob": 10000
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": -10000,
+      "bob": 0,
+      "carol": 10000
+    },
+    "settle": {
+      "min_payments": 1,
+      "plan": [
+        {
+          "from": "alice",
+          "to": "carol",
+          "amount": 10000
+        }
+      ]
+    },
+    "direct": [
+      {
+        "from": "alice",
+        "to": "bob",
+        "amount": 10000
+      },
+      {
+        "from": "bob",
+        "to": "carol",
+        "amount": 10000
+      }
+    ]
+  }
+}

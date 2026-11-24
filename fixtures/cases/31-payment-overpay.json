@@ -1,0 +1,73 @@
+{
+  "id": "31-payment-overpay",
+  "description": "Bob pays 4000 but owed 3000: Alice now owes Bob 1000.",
+  "tags": [
+    "payment"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 9000,
+      "paid_by": {
+        "alice": 9000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol"
+        ]
+      }
+    }
+  ],
+  "payments": [
+    {
+      "from": "bob",
+      "to": "alice",
+      "amount": 4000
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 2000,
+      "bob": 1000,
+      "carol": -3000
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 2000
+        },
+        {
+          "from": "carol",
+          "to": "bob",
+          "amount": 1000
+        }
+      ]
+    },
+    "direct": [
+      {
+        "from": "alice",
+        "to": "bob",
+        "amount": 1000
+      },
+      {
+        "from": "carol",
+        "to": "alice",
+        "amount": 3000
+      }
+    ]
+  }
+}

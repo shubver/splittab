@@ -1,0 +1,62 @@
+{
+  "id": "12-percent-rounding",
+  "description": "33.33 / 33.33 / 33.34 % of 1000: floors sum to 999, the spare unit goes to the largest remainder (Carol, .4).",
+  "tags": [
+    "percent",
+    "rounding"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 1000,
+      "paid_by": {
+        "alice": 1000
+      },
+      "split": {
+        "type": "percent",
+        "percents": {
+          "alice": "33.33",
+          "bob": "33.33",
+          "carol": "33.34"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 667,
+      "bob": -333,
+      "carol": -334
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 334
+        },
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 333
+        }
+      ]
+    },
+    "expense_owed": {
+      "e1": {
+        "alice": 333,
+        "bob": 333,
+        "carol": 334
+      }
+    }
+  }
+}

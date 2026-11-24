@@ -1,0 +1,73 @@
+{
+  "id": "19-nights-rounding",
+  "description": "10000 over 3 nights: exact shares 40000/9, 25000/9, 25000/9 -> 4444, 2778, 2778 (Bob and Carol have the largest remainders).",
+  "tags": [
+    "nights",
+    "rounding"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 10000,
+      "paid_by": {
+        "bob": 10000
+      },
+      "split": {
+        "type": "nights",
+        "total_nights": 3,
+        "nights": {
+          "alice": [
+            1,
+            2,
+            3
+          ],
+          "bob": [
+            1,
+            2
+          ],
+          "carol": [
+            2,
+            3
+          ]
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": -4444,
+      "bob": 7222,
+      "carol": -2778
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "alice",
+          "to": "bob",
+          "amount": 4444
+        },
+        {
+          "from": "carol",
+          "to": "bob",
+          "amount": 2778
+        }
+      ]
+    },
+    "expense_owed": {
+      "e1": {
+        "alice": 4444,
+        "bob": 2778,
+        "carol": 2778
+      }
+    }
+  }
+}

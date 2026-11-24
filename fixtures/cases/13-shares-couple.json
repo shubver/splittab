@@ -1,0 +1,54 @@
+{
+  "id": "13-shares-couple",
+  "description": "Shares 1:1:2 - Carol brings a partner and pays double.",
+  "tags": [
+    "shares"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 8000,
+      "paid_by": {
+        "alice": 8000
+      },
+      "split": {
+        "type": "shares",
+        "shares": {
+          "alice": "1",
+          "bob": "1",
+          "carol": "2"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 6000,
+      "bob": -2000,
+      "carol": -4000
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 4000
+        },
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 2000
+        }
+      ]
+    }
+  }
+}

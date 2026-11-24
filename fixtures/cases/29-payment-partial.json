@@ -1,0 +1,73 @@
+{
+  "id": "29-payment-partial",
+  "description": "Bob pays Alice 1000 of the 3000 he owes.",
+  "tags": [
+    "payment"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 9000,
+      "paid_by": {
+        "alice": 9000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol"
+        ]
+      }
+    }
+  ],
+  "payments": [
+    {
+      "from": "bob",
+      "to": "alice",
+      "amount": 1000
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 5000,
+      "bob": -2000,
+      "carol": -3000
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 3000
+        },
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 2000
+        }
+      ]
+    },
+    "direct": [
+      {
+        "from": "bob",
+        "to": "alice",
+        "amount": 2000
+      },
+      {
+        "from": "carol",
+        "to": "alice",
+        "amount": 3000
+      }
+    ]
+  }
+}

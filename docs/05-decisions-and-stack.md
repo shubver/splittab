@@ -94,7 +94,7 @@ so guests see exactly the same numbers as the app.
 ---
 
 ## Build order
-1. **Balance fixtures:** about 30 JSON test cases covering equal and uneven splits, by nights, subgroups, multiple currencies, rounding, settle-up. Drafted and checked in Python.
+1. ✅ **Balance fixtures (done):** 47 JSON test cases plus a Python reference implementation and tests. See [`fixtures/README.md`](../fixtures/README.md).
 2. **`splittab_core` in Dart:** passes every fixture. A small, self-contained first Dart project.
 3. **Supabase schema + PowerSync sync rules:** trips, members, expenses, splits, payments, with row-level security.
 4. **Flutter app v1:** trip home, quick add, bulk add, balances, End trip, offline.

@@ -1,0 +1,43 @@
+{
+  "id": "09-zero-amount",
+  "description": "A zero-amount expense is valid and changes nothing.",
+  "tags": [
+    "edge"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 0,
+      "paid_by": {
+        "alice": 0
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 0,
+      "bob": 0,
+      "carol": 0
+    },
+    "settle": {
+      "min_payments": 0,
+      "plan": []
+    }
+  }
+}

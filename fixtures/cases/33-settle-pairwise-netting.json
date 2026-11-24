@@ -1,0 +1,68 @@
+{
+  "id": "33-settle-pairwise-netting",
+  "description": "Bob owes Alice 3000, Alice owes Bob 1000: direct view nets to Bob -> Alice 2000.",
+  "tags": [
+    "settle",
+    "direct"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 3000,
+      "paid_by": {
+        "alice": 3000
+      },
+      "split": {
+        "type": "exact",
+        "amounts": {
+          "bob": 3000
+        }
+      }
+    },
+    {
+      "id": "e2",
+      "amount": 1000,
+      "paid_by": {
+        "bob": 1000
+      },
+      "split": {
+        "type": "exact",
+        "amounts": {
+          "alice": 1000
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 2000,
+      "bob": -2000,
+      "carol": 0
+    },
+    "settle": {
+      "min_payments": 1,
+      "plan": [
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 2000
+        }
+      ]
+    },
+    "direct": [
+      {
+        "from": "bob",
+        "to": "alice",
+        "amount": 2000
+      }
+    ]
+  }
+}

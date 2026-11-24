@@ -1,0 +1,63 @@
+{
+  "id": "23-currency-home-zero-decimal",
+  "description": "Home currency JPY (no minor unit): 45.00 USD x 150.5 = 6772.5 -> 6773 JPY (half away from zero).",
+  "tags": [
+    "currency",
+    "zero-decimal",
+    "rounding"
+  ],
+  "trip": {
+    "home_currency": "JPY",
+    "members": [
+      "alice",
+      "bob"
+    ]
+  },
+  "currency_exponents": {
+    "JPY": 0,
+    "USD": 2
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 4500,
+      "paid_by": {
+        "alice": 4500
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      },
+      "currency": "USD",
+      "rate": "150.5"
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 3386,
+      "bob": -3386
+    },
+    "settle": {
+      "min_payments": 1,
+      "plan": [
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 3386
+        }
+      ]
+    },
+    "expense_home_totals": {
+      "e1": 6773
+    },
+    "expense_owed": {
+      "e1": {
+        "alice": 3387,
+        "bob": 3386
+      }
+    }
+  }
+}

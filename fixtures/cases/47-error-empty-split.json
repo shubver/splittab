@@ -1,0 +1,31 @@
+{
+  "id": "47-error-empty-split",
+  "description": "Nobody is in the split.",
+  "tags": [
+    "error"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 5000,
+      "paid_by": {
+        "alice": 5000
+      },
+      "split": {
+        "type": "equal",
+        "among": []
+      }
+    }
+  ],
+  "expected": {
+    "error": "empty_split"
+  }
+}

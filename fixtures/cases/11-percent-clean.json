@@ -1,0 +1,54 @@
+{
+  "id": "11-percent-clean",
+  "description": "Percent split with whole results.",
+  "tags": [
+    "percent"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 20000,
+      "paid_by": {
+        "bob": 20000
+      },
+      "split": {
+        "type": "percent",
+        "percents": {
+          "alice": "50",
+          "bob": "30",
+          "carol": "20"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": -10000,
+      "bob": 14000,
+      "carol": -4000
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "alice",
+          "to": "bob",
+          "amount": 10000
+        },
+        {
+          "from": "carol",
+          "to": "bob",
+          "amount": 4000
+        }
+      ]
+    }
+  }
+}

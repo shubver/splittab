@@ -1,0 +1,257 @@
+{
+  "id": "37-realistic-goa-trip",
+  "description": "Four friends, INR trip, ten expenses: nights split, vehicle pair, shares, a USD expense, two payers, a deposit with a partial refund, and one payment.",
+  "tags": [
+    "realistic",
+    "nights",
+    "currency",
+    "multi-payer",
+    "refund",
+    "shares",
+    "payment"
+  ],
+  "trip": {
+    "home_currency": "INR",
+    "members": [
+      "rahul",
+      "priya",
+      "ankit",
+      "meera"
+    ]
+  },
+  "currency_exponents": {
+    "INR": 2,
+    "USD": 2
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 2400000,
+      "paid_by": {
+        "rahul": 2400000
+      },
+      "split": {
+        "type": "nights",
+        "total_nights": 3,
+        "nights": {
+          "rahul": [
+            1,
+            2,
+            3
+          ],
+          "priya": [
+            1,
+            2,
+            3
+          ],
+          "ankit": [
+            1,
+            2,
+            3
+          ],
+          "meera": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "id": "e2",
+      "amount": 360000,
+      "paid_by": {
+        "ankit": 360000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "ankit",
+          "meera"
+        ]
+      }
+    },
+    {
+      "id": "e3",
+      "amount": 150000,
+      "paid_by": {
+        "ankit": 150000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "ankit",
+          "meera"
+        ]
+      }
+    },
+    {
+      "id": "e4",
+      "amount": 480000,
+      "paid_by": {
+        "priya": 480000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "rahul",
+          "priya",
+          "ankit",
+          "meera"
+        ]
+      }
+    },
+    {
+      "id": "e5",
+      "amount": 215050,
+      "paid_by": {
+        "meera": 215050
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "rahul",
+          "priya",
+          "ankit",
+          "meera"
+        ]
+      }
+    },
+    {
+      "id": "e6",
+      "amount": 6000,
+      "paid_by": {
+        "rahul": 6000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "rahul",
+          "priya",
+          "ankit"
+        ]
+      },
+      "currency": "USD",
+      "rate": "83.20"
+    },
+    {
+      "id": "e7",
+      "amount": 90000,
+      "paid_by": {
+        "meera": 90000
+      },
+      "split": {
+        "type": "shares",
+        "shares": {
+          "rahul": "1",
+          "priya": "2"
+        }
+      }
+    },
+    {
+      "id": "e8",
+      "amount": 45000,
+      "paid_by": {
+        "priya": 25000,
+        "rahul": 20000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "rahul",
+          "priya",
+          "ankit",
+          "meera"
+        ]
+      }
+    },
+    {
+      "id": "e9",
+      "amount": 200000,
+      "paid_by": {
+        "ankit": 200000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "ankit",
+          "meera"
+        ]
+      }
+    },
+    {
+      "id": "e10",
+      "amount": -150000,
+      "paid_by": {
+        "ankit": -150000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "ankit",
+          "meera"
+        ]
+      }
+    }
+  ],
+  "payments": [
+    {
+      "from": "priya",
+      "to": "rahul",
+      "amount": 300000
+    }
+  ],
+  "expected": {
+    "balances": {
+      "rahul": 1571120,
+      "priya": -273080,
+      "ankit": -738078,
+      "meera": -559962
+    },
+    "settle": {
+      "min_payments": 3,
+      "plan": [
+        {
+          "from": "ankit",
+          "to": "rahul",
+          "amount": 738078
+        },
+        {
+          "from": "meera",
+          "to": "rahul",
+          "amount": 559962
+        },
+        {
+          "from": "priya",
+          "to": "rahul",
+          "amount": 273080
+        }
+      ]
+    },
+    "expense_home_totals": {
+      "e1": 2400000,
+      "e2": 360000,
+      "e3": 150000,
+      "e4": 480000,
+      "e5": 215050,
+      "e6": 499200,
+      "e7": 90000,
+      "e8": 45000,
+      "e9": 200000,
+      "e10": -150000
+    },
+    "expense_owed": {
+      "e1": {
+        "rahul": 666667,
+        "priya": 666667,
+        "ankit": 666666,
+        "meera": 400000
+      },
+      "e5": {
+        "rahul": 53763,
+        "priya": 53763,
+        "ankit": 53762,
+        "meera": 53762
+      }
+    }
+  }
+}

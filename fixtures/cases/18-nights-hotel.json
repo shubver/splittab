@@ -1,0 +1,72 @@
+{
+  "id": "18-nights-hotel",
+  "description": "18000 hotel, 3 nights. Rahul all nights, Priya nights 1-2, Ankit nights 2-3. Each night costs 6000 split among those present.",
+  "tags": [
+    "nights"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "rahul",
+      "priya",
+      "ankit"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 18000,
+      "paid_by": {
+        "rahul": 18000
+      },
+      "split": {
+        "type": "nights",
+        "total_nights": 3,
+        "nights": {
+          "rahul": [
+            1,
+            2,
+            3
+          ],
+          "priya": [
+            1,
+            2
+          ],
+          "ankit": [
+            2,
+            3
+          ]
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "rahul": 10000,
+      "priya": -5000,
+      "ankit": -5000
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "priya",
+          "to": "rahul",
+          "amount": 5000
+        },
+        {
+          "from": "ankit",
+          "to": "rahul",
+          "amount": 5000
+        }
+      ]
+    },
+    "expense_owed": {
+      "e1": {
+        "rahul": 8000,
+        "priya": 5000,
+        "ankit": 5000
+      }
+    }
+  }
+}

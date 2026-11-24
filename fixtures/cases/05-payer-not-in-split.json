@@ -1,0 +1,53 @@
+{
+  "id": "05-payer-not-in-split",
+  "description": "Alice pays for Bob and Carol but is not part of the split.",
+  "tags": [
+    "equal"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 5000,
+      "paid_by": {
+        "alice": 5000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "bob",
+          "carol"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 5000,
+      "bob": -2500,
+      "carol": -2500
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 2500
+        },
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 2500
+        }
+      ]
+    }
+  }
+}

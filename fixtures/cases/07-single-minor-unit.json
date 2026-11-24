@@ -1,0 +1,57 @@
+{
+  "id": "07-single-minor-unit",
+  "description": "1 cent among 3 people: one person owes 1, the rest 0.",
+  "tags": [
+    "equal",
+    "rounding"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 1,
+      "paid_by": {
+        "bob": 1
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": -1,
+      "bob": 1,
+      "carol": 0
+    },
+    "settle": {
+      "min_payments": 1,
+      "plan": [
+        {
+          "from": "alice",
+          "to": "bob",
+          "amount": 1
+        }
+      ]
+    },
+    "expense_owed": {
+      "e1": {
+        "alice": 1,
+        "bob": 0,
+        "carol": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "35-settle-already-settled",
+  "description": "Two mirrored expenses cancel out: nothing to settle.",
+  "tags": [
+    "settle"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 1000,
+      "paid_by": {
+        "alice": 1000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      }
+    },
+    {
+      "id": "e2",
+      "amount": 1000,
+      "paid_by": {
+        "bob": 1000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 0,
+      "bob": 0
+    },
+    "settle": {
+      "min_payments": 0,
+      "plan": []
+    },
+    "direct": []
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "id": "16-two-payers",
+  "description": "Alice paid 6000 and Bob 4000 toward one 10000 bill split equally four ways.",
+  "tags": [
+    "multi-payer"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol",
+      "dave"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 10000,
+      "paid_by": {
+        "alice": 6000,
+        "bob": 4000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol",
+          "dave"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 3500,
+      "bob": 1500,
+      "carol": -2500,
+      "dave": -2500
+    },
+    "settle": {
+      "min_payments": 3,
+      "plan": [
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 2500
+        },
+        {
+          "from": "dave",
+          "to": "bob",
+          "amount": 1500
+        },
+        {
+          "from": "dave",
+          "to": "alice",
+          "amount": 1000
+        }
+      ]
+    },
+    "direct": [
+      {
+        "from": "carol",
+        "to": "alice",
+        "amount": 2500
+      },
+      {
+        "from": "dave",
+        "to": "alice",
+        "amount": 1000
+      },
+      {
+        "from": "dave",
+        "to": "bob",
+        "amount": 1500
+      }
+    ]
+  }
+}

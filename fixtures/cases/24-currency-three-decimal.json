@@ -1,0 +1,56 @@
+{
+  "id": "24-currency-three-decimal",
+  "description": "KWD has 3 decimals: 12.345 KWD x 3.25 = 40.12125 USD -> 4012 cents.",
+  "tags": [
+    "currency",
+    "rounding"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob"
+    ]
+  },
+  "currency_exponents": {
+    "USD": 2,
+    "KWD": 3
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 12345,
+      "paid_by": {
+        "alice": 12345
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      },
+      "currency": "KWD",
+      "rate": "3.25"
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 2006,
+      "bob": -2006
+    },
+    "settle": {
+      "min_payments": 1,
+      "plan": [
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 2006
+        }
+      ]
+    },
+    "expense_home_totals": {
+      "e1": 4012
+    }
+  }
+}

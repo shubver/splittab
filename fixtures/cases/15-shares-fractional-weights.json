@@ -1,0 +1,53 @@
+{
+  "id": "15-shares-fractional-weights",
+  "description": "Fractional shares (1.5 : 0.5) are allowed; payer outside the split.",
+  "tags": [
+    "shares"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 1000,
+      "paid_by": {
+        "carol": 1000
+      },
+      "split": {
+        "type": "shares",
+        "shares": {
+          "alice": "1.5",
+          "bob": "0.5"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": -750,
+      "bob": -250,
+      "carol": 1000
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "alice",
+          "to": "carol",
+          "amount": 750
+        },
+        {
+          "from": "bob",
+          "to": "carol",
+          "amount": 250
+        }
+      ]
+    }
+  }
+}

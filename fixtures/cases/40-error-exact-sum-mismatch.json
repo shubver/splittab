@@ -1,0 +1,35 @@
+{
+  "id": "40-error-exact-sum-mismatch",
+  "description": "Exact amounts add to 9000 but the expense is 10000.",
+  "tags": [
+    "error"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 10000,
+      "paid_by": {
+        "alice": 10000
+      },
+      "split": {
+        "type": "exact",
+        "amounts": {
+          "alice": 4000,
+          "bob": 4000,
+          "carol": 1000
+        }
+      }
+    }
+  ],
+  "expected": {
+    "error": "split_sum_mismatch"
+  }
+}

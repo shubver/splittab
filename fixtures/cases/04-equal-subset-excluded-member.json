@@ -1,0 +1,57 @@
+{
+  "id": "04-equal-subset-excluded-member",
+  "description": "Carol is not part of this expense (e.g. a non-drinker): she owes nothing.",
+  "tags": [
+    "equal",
+    "subgroup"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol",
+      "dave"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 6000,
+      "paid_by": {
+        "dave": 6000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "dave"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": -2000,
+      "bob": -2000,
+      "carol": 0,
+      "dave": 4000
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "alice",
+          "to": "dave",
+          "amount": 2000
+        },
+        {
+          "from": "bob",
+          "to": "dave",
+          "amount": 2000
+        }
+      ]
+    }
+  }
+}

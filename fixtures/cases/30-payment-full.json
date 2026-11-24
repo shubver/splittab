@@ -1,0 +1,56 @@
+{
+  "id": "30-payment-full",
+  "description": "Both debtors pay in full: everyone is settled, empty plan.",
+  "tags": [
+    "payment"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 9000,
+      "paid_by": {
+        "alice": 9000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol"
+        ]
+      }
+    }
+  ],
+  "payments": [
+    {
+      "from": "bob",
+      "to": "alice",
+      "amount": 3000
+    },
+    {
+      "from": "carol",
+      "to": "alice",
+      "amount": 3000
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 0,
+      "bob": 0,
+      "carol": 0
+    },
+    "settle": {
+      "min_payments": 0,
+      "plan": []
+    },
+    "direct": []
+  }
+}

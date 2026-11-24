@@ -1,0 +1,63 @@
+{
+  "id": "38-large-percent-intermediates",
+  "description": "5,000,000,000 minor units x 33.333333% : the intermediate product (1.67e17) exceeds 2^53, so it breaks JavaScript numbers (Flutter web). Implementations must use exact integer/rational arithmetic (BigInt on web).",
+  "tags": [
+    "large",
+    "web-int-safety",
+    "percent"
+  ],
+  "trip": {
+    "home_currency": "IDR",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 5000000000,
+      "paid_by": {
+        "alice": 5000000000
+      },
+      "split": {
+        "type": "percent",
+        "percents": {
+          "alice": "33.333333",
+          "bob": "33.333333",
+          "carol": "33.333334"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 3333333350,
+      "bob": -1666666650,
+      "carol": -1666666700
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 1666666700
+        },
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 1666666650
+        }
+      ]
+    },
+    "expense_owed": {
+      "e1": {
+        "alice": 1666666650,
+        "bob": 1666666650,
+        "carol": 1666666700
+      }
+    }
+  }
+}

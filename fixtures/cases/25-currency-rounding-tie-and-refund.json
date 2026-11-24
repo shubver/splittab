@@ -1,0 +1,78 @@
+{
+  "id": "25-currency-rounding-tie-and-refund",
+  "description": "10 x 1.05 = 10.5 -> 11 (ties away from zero); the mirrored refund -10 -> -11. They cancel exactly.",
+  "tags": [
+    "currency",
+    "rounding",
+    "refund"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob"
+    ]
+  },
+  "currency_exponents": {
+    "USD": 2,
+    "EUR": 2
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 10,
+      "paid_by": {
+        "alice": 10
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      },
+      "currency": "EUR",
+      "rate": "1.05"
+    },
+    {
+      "id": "e2",
+      "amount": -10,
+      "paid_by": {
+        "alice": -10
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      },
+      "currency": "EUR",
+      "rate": "1.05"
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 0,
+      "bob": 0
+    },
+    "settle": {
+      "min_payments": 0,
+      "plan": []
+    },
+    "expense_home_totals": {
+      "e1": 11,
+      "e2": -11
+    },
+    "expense_owed": {
+      "e1": {
+        "alice": 6,
+        "bob": 5
+      },
+      "e2": {
+        "alice": -6,
+        "bob": -5
+      }
+    }
+  }
+}

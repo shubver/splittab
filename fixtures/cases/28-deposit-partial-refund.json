@@ -1,0 +1,81 @@
+{
+  "id": "28-deposit-partial-refund",
+  "description": "5000 deposit, 4500 refunded (500 deduction). The refund is a negative expense with the same split, so the 500 is shared 167/167/166.",
+  "tags": [
+    "refund"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 5000,
+      "paid_by": {
+        "alice": 5000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol"
+        ]
+      }
+    },
+    {
+      "id": "e2",
+      "amount": -4500,
+      "paid_by": {
+        "alice": -4500
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 333,
+      "bob": -167,
+      "carol": -166
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 167
+        },
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 166
+        }
+      ]
+    },
+    "expense_owed": {
+      "e1": {
+        "alice": 1667,
+        "bob": 1667,
+        "carol": 1666
+      },
+      "e2": {
+        "alice": -1500,
+        "bob": -1500,
+        "carol": -1500
+      }
+    }
+  }
+}

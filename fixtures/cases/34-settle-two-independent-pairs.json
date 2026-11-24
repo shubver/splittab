@@ -1,0 +1,67 @@
+{
+  "id": "34-settle-two-independent-pairs",
+  "description": "Two unrelated debts need exactly two payments.",
+  "tags": [
+    "settle"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol",
+      "dave"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 2000,
+      "paid_by": {
+        "alice": 2000
+      },
+      "split": {
+        "type": "exact",
+        "amounts": {
+          "bob": 2000
+        }
+      }
+    },
+    {
+      "id": "e2",
+      "amount": 3000,
+      "paid_by": {
+        "carol": 3000
+      },
+      "split": {
+        "type": "exact",
+        "amounts": {
+          "dave": 3000
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 2000,
+      "bob": -2000,
+      "carol": 3000,
+      "dave": -3000
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 2000
+        },
+        {
+          "from": "dave",
+          "to": "carol",
+          "amount": 3000
+        }
+      ]
+    }
+  }
+}

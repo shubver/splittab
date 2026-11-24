@@ -1,0 +1,54 @@
+{
+  "id": "10-exact-amounts",
+  "description": "Exact amounts per person (e.g. tickets with different fares).",
+  "tags": [
+    "exact"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 12000,
+      "paid_by": {
+        "alice": 12000
+      },
+      "split": {
+        "type": "exact",
+        "amounts": {
+          "alice": 2000,
+          "bob": 4000,
+          "carol": 6000
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 10000,
+      "bob": -4000,
+      "carol": -6000
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 6000
+        },
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 4000
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "id": "44-error-invalid-shares",
+  "description": "All shares are zero.",
+  "tags": [
+    "error"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 5000,
+      "paid_by": {
+        "alice": 5000
+      },
+      "split": {
+        "type": "shares",
+        "shares": {
+          "alice": "0",
+          "bob": "0"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "error": "invalid_shares"
+  }
+}

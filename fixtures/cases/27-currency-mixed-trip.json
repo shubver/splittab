@@ -1,0 +1,88 @@
+{
+  "id": "27-currency-mixed-trip",
+  "description": "Home EUR; one expense each in USD, GBP and EUR. Each is converted at its own rate, then summed.",
+  "tags": [
+    "currency"
+  ],
+  "trip": {
+    "home_currency": "EUR",
+    "members": [
+      "alice",
+      "bob"
+    ]
+  },
+  "currency_exponents": {
+    "EUR": 2,
+    "USD": 2,
+    "GBP": 2
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 5000,
+      "paid_by": {
+        "alice": 5000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      },
+      "currency": "USD",
+      "rate": "0.92"
+    },
+    {
+      "id": "e2",
+      "amount": 2000,
+      "paid_by": {
+        "bob": 2000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      },
+      "currency": "GBP",
+      "rate": "1.17"
+    },
+    {
+      "id": "e3",
+      "amount": 3000,
+      "paid_by": {
+        "alice": 3000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 2630,
+      "bob": -2630
+    },
+    "settle": {
+      "min_payments": 1,
+      "plan": [
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 2630
+        }
+      ]
+    },
+    "expense_home_totals": {
+      "e1": 4600,
+      "e2": 2340,
+      "e3": 3000
+    }
+  }
+}

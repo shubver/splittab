@@ -1,0 +1,61 @@
+{
+  "id": "26-currency-multipayer-exact",
+  "description": "Foreign expense with two payers and an exact split: weights are applied to the CONVERTED total (13500 USD cents).",
+  "tags": [
+    "currency",
+    "multi-payer",
+    "exact"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "currency_exponents": {
+    "USD": 2,
+    "EUR": 2
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 9000,
+      "paid_by": {
+        "alice": 6000,
+        "bob": 3000
+      },
+      "split": {
+        "type": "exact",
+        "amounts": {
+          "alice": 3000,
+          "bob": 3000,
+          "carol": 3000
+        }
+      },
+      "currency": "EUR",
+      "rate": "1.5"
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 4500,
+      "bob": 0,
+      "carol": -4500
+    },
+    "settle": {
+      "min_payments": 1,
+      "plan": [
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 4500
+        }
+      ]
+    },
+    "expense_home_totals": {
+      "e1": 13500
+    }
+  }
+}

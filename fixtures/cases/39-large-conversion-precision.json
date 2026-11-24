@@ -1,0 +1,57 @@
+{
+  "id": "39-large-conversion-precision",
+  "description": "123,456,789 VND x 0.00003987 = 4922.22217743 USD -> 492222 cents. Rates keep full decimal precision.",
+  "tags": [
+    "large",
+    "currency",
+    "zero-decimal"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob"
+    ]
+  },
+  "currency_exponents": {
+    "USD": 2,
+    "VND": 0
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 123456789,
+      "paid_by": {
+        "alice": 123456789
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      },
+      "currency": "VND",
+      "rate": "0.00003987"
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 246111,
+      "bob": -246111
+    },
+    "settle": {
+      "min_payments": 1,
+      "plan": [
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 246111
+        }
+      ]
+    },
+    "expense_home_totals": {
+      "e1": 492222
+    }
+  }
+}

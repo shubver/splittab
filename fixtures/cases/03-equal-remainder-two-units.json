@@ -1,0 +1,62 @@
+{
+  "id": "03-equal-remainder-two-units",
+  "description": "2000 / 3 leaves 2 units; they go to the first two members in trip order.",
+  "tags": [
+    "equal",
+    "rounding"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 2000,
+      "paid_by": {
+        "carol": 2000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": -667,
+      "bob": -667,
+      "carol": 1334
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "alice",
+          "to": "carol",
+          "amount": 667
+        },
+        {
+          "from": "bob",
+          "to": "carol",
+          "amount": 667
+        }
+      ]
+    },
+    "expense_owed": {
+      "e1": {
+        "alice": 667,
+        "bob": 667,
+        "carol": 666
+      }
+    }
+  }
+}

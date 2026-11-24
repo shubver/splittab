@@ -1,0 +1,113 @@
+{
+  "id": "20-vehicle-subgroups-trip",
+  "description": "Two cars. Fuel is split inside each car; the toll is split by everyone. Shows how 'direct' differs from the minimal plan.",
+  "tags": [
+    "subgroup",
+    "direct"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol",
+      "dave"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 3000,
+      "paid_by": {
+        "alice": 3000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob"
+        ]
+      }
+    },
+    {
+      "id": "e2",
+      "amount": 5000,
+      "paid_by": {
+        "dave": 5000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "carol",
+          "dave"
+        ]
+      }
+    },
+    {
+      "id": "e3",
+      "amount": 1000,
+      "paid_by": {
+        "carol": 1000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol",
+          "dave"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 1250,
+      "bob": -1750,
+      "carol": -1750,
+      "dave": 2250
+    },
+    "settle": {
+      "min_payments": 3,
+      "plan": [
+        {
+          "from": "bob",
+          "to": "dave",
+          "amount": 1750
+        },
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 1250
+        },
+        {
+          "from": "carol",
+          "to": "dave",
+          "amount": 500
+        }
+      ]
+    },
+    "direct": [
+      {
+        "from": "alice",
+        "to": "carol",
+        "amount": 250
+      },
+      {
+        "from": "bob",
+        "to": "alice",
+        "amount": 1500
+      },
+      {
+        "from": "bob",
+        "to": "carol",
+        "amount": 250
+      },
+      {
+        "from": "carol",
+        "to": "dave",
+        "amount": 2250
+      }
+    ]
+  }
+}

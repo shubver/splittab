@@ -1,0 +1,64 @@
+{
+  "id": "22-currency-jpy-zero-decimal",
+  "description": "JPY has no minor unit: 15000 JPY x 0.0067 = 100.50 USD = 10050 cents.",
+  "tags": [
+    "currency",
+    "zero-decimal"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "currency_exponents": {
+    "USD": 2,
+    "JPY": 0
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 15000,
+      "paid_by": {
+        "bob": 15000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol"
+        ]
+      },
+      "currency": "JPY",
+      "rate": "0.0067"
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": -3350,
+      "bob": 6700,
+      "carol": -3350
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "alice",
+          "to": "bob",
+          "amount": 3350
+        },
+        {
+          "from": "carol",
+          "to": "bob",
+          "amount": 3350
+        }
+      ]
+    },
+    "expense_home_totals": {
+      "e1": 10050
+    }
+  }
+}

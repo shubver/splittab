@@ -1,0 +1,34 @@
+{
+  "id": "43-error-unknown-member",
+  "description": "'zoe' is not a member of the trip.",
+  "tags": [
+    "error"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 5000,
+      "paid_by": {
+        "alice": 5000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "zoe"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "error": "unknown_member"
+  }
+}

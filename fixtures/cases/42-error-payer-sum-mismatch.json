@@ -1,0 +1,35 @@
+{
+  "id": "42-error-payer-sum-mismatch",
+  "description": "Payers add to 4000 but the expense is 5000.",
+  "tags": [
+    "error"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 5000,
+      "paid_by": {
+        "alice": 4000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "error": "payer_sum_mismatch"
+  }
+}

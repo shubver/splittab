@@ -1,0 +1,57 @@
+{
+  "id": "17-two-payers-neither-in-split",
+  "description": "Two payers, neither takes part in the split. Two valid pairings exist, so only the count is asserted.",
+  "tags": [
+    "multi-payer",
+    "settle-ambiguous"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol",
+      "dave"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 6000,
+      "paid_by": {
+        "alice": 3000,
+        "bob": 3000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "carol",
+          "dave"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 3000,
+      "bob": 3000,
+      "carol": -3000,
+      "dave": -3000
+    },
+    "settle": {
+      "min_payments": 2
+    },
+    "direct": [
+      {
+        "from": "carol",
+        "to": "alice",
+        "amount": 3000
+      },
+      {
+        "from": "dave",
+        "to": "bob",
+        "amount": 3000
+      }
+    ]
+  }
+}

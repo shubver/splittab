@@ -1,0 +1,35 @@
+{
+  "id": "41-error-percent-sum-invalid",
+  "description": "Percentages add to 110.",
+  "tags": [
+    "error"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 10000,
+      "paid_by": {
+        "alice": 10000
+      },
+      "split": {
+        "type": "percent",
+        "percents": {
+          "alice": "50",
+          "bob": "30",
+          "carol": "30"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "error": "percent_sum_invalid"
+  }
+}

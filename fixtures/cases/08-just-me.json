@@ -1,0 +1,42 @@
+{
+  "id": "08-just-me",
+  "description": "An expense only for the payer changes nobody's balance.",
+  "tags": [
+    "equal",
+    "edge"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 5000,
+      "paid_by": {
+        "alice": 5000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 0,
+      "bob": 0,
+      "carol": 0
+    },
+    "settle": {
+      "min_payments": 0,
+      "plan": []
+    }
+  }
+}

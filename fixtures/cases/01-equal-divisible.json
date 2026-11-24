@@ -1,0 +1,73 @@
+{
+  "id": "01-equal-divisible",
+  "description": "9000 split 3 ways, no remainder. Payer is also a participant.",
+  "tags": [
+    "equal"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 9000,
+      "paid_by": {
+        "alice": 9000
+      },
+      "split": {
+        "type": "equal",
+        "among": [
+          "alice",
+          "bob",
+          "carol"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": 6000,
+      "bob": -3000,
+      "carol": -3000
+    },
+    "settle": {
+      "min_payments": 2,
+      "plan": [
+        {
+          "from": "bob",
+          "to": "alice",
+          "amount": 3000
+        },
+        {
+          "from": "carol",
+          "to": "alice",
+          "amount": 3000
+        }
+      ]
+    },
+    "direct": [
+      {
+        "from": "bob",
+        "to": "alice",
+        "amount": 3000
+      },
+      {
+        "from": "carol",
+        "to": "alice",
+        "amount": 3000
+      }
+    ],
+    "expense_owed": {
+      "e1": {
+        "alice": 3000,
+        "bob": 3000,
+        "carol": 3000
+      }
+    }
+  }
+}

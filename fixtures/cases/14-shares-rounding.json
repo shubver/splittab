@@ -1,0 +1,53 @@
+{
+  "id": "14-shares-rounding",
+  "description": "Shares 3:2 of 101 = 60.6 / 40.4 -> 61 / 40 (largest remainder).",
+  "tags": [
+    "shares",
+    "rounding"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 101,
+      "paid_by": {
+        "bob": 101
+      },
+      "split": {
+        "type": "shares",
+        "shares": {
+          "alice": "3",
+          "bob": "2"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": -61,
+      "bob": 61
+    },
+    "settle": {
+      "min_payments": 1,
+      "plan": [
+        {
+          "from": "alice",
+          "to": "bob",
+          "amount": 61
+        }
+      ]
+    },
+    "expense_owed": {
+      "e1": {
+        "alice": 61,
+        "bob": 40
+      }
+    }
+  }
+}

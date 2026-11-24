@@ -1,0 +1,65 @@
+{
+  "id": "36-settle-naive-greedy-not-optimal",
+  "description": "Balances -3000, -2000, +4000, +3000, -2000. Splits into two zero-sum groups {Alice,Dave} and {Bob,Carol,Erin}, so 3 payments suffice. Naively paying the biggest debtor to the biggest creditor takes 4. (One synthetic expense is used to hit exactly these balances.)",
+  "tags": [
+    "settle",
+    "optimality"
+  ],
+  "trip": {
+    "home_currency": "USD",
+    "members": [
+      "alice",
+      "bob",
+      "carol",
+      "dave",
+      "erin"
+    ]
+  },
+  "expenses": [
+    {
+      "id": "e1",
+      "amount": 7000,
+      "paid_by": {
+        "carol": 4000,
+        "dave": 3000
+      },
+      "split": {
+        "type": "exact",
+        "amounts": {
+          "alice": 3000,
+          "bob": 2000,
+          "erin": 2000
+        }
+      }
+    }
+  ],
+  "expected": {
+    "balances": {
+      "alice": -3000,
+      "bob": -2000,
+      "carol": 4000,
+      "dave": 3000,
+      "erin": -2000
+    },
+    "settle": {
+      "min_payments": 3,
+      "plan": [
+        {
+          "from": "alice",
+          "to": "dave",
+          "amount": 3000
+        },
+        {
+          "from": "bob",
+          "to": "carol",
+          "amount": 2000
+        },
+        {
+          "from": "erin",
+          "to": "carol",
+          "amount": 2000
+        }
+      ]
+    }
+  }
+}
