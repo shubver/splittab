@@ -121,6 +121,9 @@ The trip has a clear **End trip** button. Settling happens **after** the trip is
 ---
 
 ## Platform decision: this requires a native app
+
+> **Update 2026-11-24:** decided on **Flutter + a Python (FastAPI) backend**, global region, server-side voice first. See [05-decisions-and-stack.md](../05-decisions-and-stack.md). The Expo recommendation below is kept for history.
+
 Background location, scheduled local notifications, notification listening, Wallet App Intents and home-screen widgets **are not available to a PWA**, especially on iOS, where PWAs get no background location or background sync.[^pwa] That overturns the earlier lean toward a PWA.
 
 **Recommendation: React Native with Expo (dev builds), plus a small web view for guests.**

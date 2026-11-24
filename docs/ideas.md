@@ -39,11 +39,15 @@ A running list of ideas for SplitTab. Add new ideas at the top of **Inbox** with
 
 ---
 
-## Open decisions
-| Decision | Options | Status |
+## Decisions
+Full log and reasoning: [05-decisions-and-stack.md](05-decisions-and-stack.md).
+
+| Decision | Choice | Status |
 |---|---|---|
-| Region focus | India first vs global | Open |
-| Platform stack | Expo (React Native) vs Flutter | Leaning Expo |
-| Voice privacy | Server-side transcript parsing vs on-device only | Open |
-| Alcohol | Own category vs tag under Food & Drinks | Leaning tag |
+| Region focus | **Global** | Decided |
+| Mobile framework | **Flutter** | Decided |
+| Backend | **Python (FastAPI)** | Decided |
+| Voice | **Server-side first**, on-device later | Decided |
+| Alcohol | Own category vs tag under Food & Drinks | Open (leaning tag) |
 | Custom categories | Per trip vs per account | Open |
+| Speech/LLM provider | To be chosen | Open |
